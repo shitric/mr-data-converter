@@ -30,7 +30,8 @@ function DataConverter(nodeId) {
                                 {"text":"Ruby",                   "id":"ruby",             "notes":""},
                                 {"text":"XML - Properties",       "id":"xmlProperties",    "notes":""},
                                 {"text":"XML - Nodes",            "id":"xml",              "notes":""},
-                                {"text":"XML - Illustrator",      "id":"xmlIllustrator",   "notes":""}];
+                                {"text":"XML - Illustrator",      "id":"xmlIllustrator",   "notes":""},
+                                {"text":"Valid Json",      "id":"validJson",             "notes":""},];
   this.outputDataType         = "json";
 
   this.columnDelimiter        = "\t";
