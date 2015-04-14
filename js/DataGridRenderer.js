@@ -2,50 +2,7 @@
 //  DataGridRenderer.js
 //  Part of Mr-Data-Converter
 //
-//  Created by Shan Carter on 2010-10-18
-
-
-
-var recurFunc = function(arr, val) {
-
-    // stop condition
-    if (arr.length <= 0) {
-        return val;
-    }
-    // check if array
-    // pop the first item of the array;
-    var first = arr[0];
-    var rest = arr.slice(1);
-
-
-    var result = {};
-    if (_.isUndefined(result[first]) ) {
-        result[first] = {};
-    }
-    var temp = recurFunc(rest, val);
-    result[first] = temp;
-    return result;
-}
-
-var convert = function(data) {
-    var output = {};
-
-    // Take data as an object with dot notation key
-    if (_.isObject(data) && !_.isArray(data)) {
-        for (var item in data) {
-            if (data.hasOwnProperty(item)) {
-                var iArray = item.split(".");
-                //console.log(iArray);
-                var value = data[item];
-                console.log(recurFunc(iArray, value));
-                _.extend_x(output, recurFunc(iArray, value));
-            }
-        }
-    }
-
-    return output;
-}
-
+//  Created by Shan Carter on 2010-10-18.
 //
 
 
@@ -169,55 +126,34 @@ var DataGridRenderer = {
   //---------------------------------------
 
   json: function (dataGrid, headerNames, headerTypes, indent, newLine) {
-      //inits...
-      var commentLine = "//";
-      var commentLineEnd = "";
-      var outputText = "[";
-      var numRows = dataGrid.length;
-      var numColumns = headerNames.length;
+    //inits...
+    var commentLine = "//";
+    var commentLineEnd = "";
+    var outputText = "[";
+    var numRows = dataGrid.length;
+    var numColumns = headerNames.length;
 
-      //begin render loop
-      for (var i=0; i < numRows; i++) {
-          var row = dataGrid[i];
-          outputText += "{";
-          for (var j=0; j < numColumns; j++) {
-              if ((headerTypes[j] == "int")||(headerTypes[j] == "float")) {
-                  var rowOutput = row[j] || "null";
-              } else {
-                  var rowOutput = '"' + ( row[j] || "" ) + '"';
-              };
+    //begin render loop
+    for (var i=0; i < numRows; i++) {
+      var row = dataGrid[i];
+      outputText += "{";
+      for (var j=0; j < numColumns; j++) {
+        if ((headerTypes[j] == "int")||(headerTypes[j] == "float")) {
+          var rowOutput = row[j] || "null";
+        } else {
+          var rowOutput = '"' + ( row[j] || "" ) + '"';
+        };
 
-              outputText += ('"'+headerNames[j] +'"' + ":" + rowOutput );
+      outputText += ('"'+headerNames[j] +'"' + ":" + rowOutput );
 
-              if (j < (numColumns-1)) {outputText+=","};
-          };
-          outputText += "}";
-          if (i < (numRows-1)) {outputText += ","+newLine};
+        if (j < (numColumns-1)) {outputText+=","};
       };
-      outputText += "]";
+      outputText += "}";
+      if (i < (numRows-1)) {outputText += ","+newLine};
+    };
+    outputText += "]";
 
-
-      var string = JSON.parse(outputText);
-
-      var json = {
-          data:string
-      };
-
-
-
-      console.log(string, "STRING");
-
-      for(var i =0;i<json.data.length;i++){
-          json.data[i] = convert(json.data[i]);
-      }
-
-      console.log(json.data, "JSON");
-
-      json = JSON.stringify(json);
-
-      console.log(json);
-
-      return json;
+    return outputText;
   },
 
   //---------------------------------------
@@ -597,6 +533,18 @@ var DataGridRenderer = {
 
     return outputText;
 
-  }
+  },
+
+
+    jsonString: function (dataGrid, headerNames, headerTypes, indent, newLine) {
+        var outputText = this.json(dataGrid, headerNames, headerTypes, indent, newLine);
+        var string = JSON.parse(outputText);
+        var json = string;
+        for(var i =0;i<json.length;i++){
+            json[i] = convertToJsonWithoutDots(json[i]);
+        }
+        json = JSON.stringify(json);
+        return json;
+    }
 
 }

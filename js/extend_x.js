@@ -24,7 +24,7 @@ var
     nativeKeys         = Object.keys,
     nativeBind         = FuncProto.bind;
 
-var each = _.each = _.forEach = function(obj, iterator, context) {
+var each = function(obj, iterator, context) {
     if (obj == null) return;
     if (nativeForEach && obj.forEach === nativeForEach) {
         obj.forEach(iterator, context);
@@ -40,7 +40,6 @@ var each = _.each = _.forEach = function(obj, iterator, context) {
         }
     }
 };
-
 
 _.extend_x = function(obj) {
     var pc = function(target, source) {
@@ -67,10 +66,7 @@ _.extend_x = function(obj) {
         }
     }
     each(slice.call(arguments, 1), function(source) {
-        if (source) {
-
-            pc (obj, source);
-        }
+        if (source) pc (obj, source);
     });
     return obj;
 };
