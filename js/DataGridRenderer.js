@@ -536,7 +536,7 @@ var DataGridRenderer = {
   },
 
 
-    jsonString: function (dataGrid, headerNames, headerTypes, indent, newLine) {
+    jsonExtend: function (dataGrid, headerNames, headerTypes, indent, newLine) {
         var outputText = this.json(dataGrid, headerNames, headerTypes, indent, newLine);
         var string = JSON.parse(outputText);
         var json = string;
